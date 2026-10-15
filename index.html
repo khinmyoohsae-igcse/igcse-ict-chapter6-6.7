@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IGCSE ICT - Computers & Information Systems in Medicine Quiz (20 MCQs)</title>
+    <style>
+        :root {
+            --bg-main: #090d16;
+            --bg-card: #131d31;
+            --border-color: #223354;
+            --accent: #38bdf8;
+            --accent-hover: #0ea5e9;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        header {
+            background-color: var(--bg-card);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1.5rem 1rem;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+        }
+
+        header h1 {
+            color: var(--accent);
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-bottom: 0.35rem;
+        }
+
+        header p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        main {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem 1rem;
+            max-width: 800px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .quiz-status {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.25rem;
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+
+        .score-pill {
+            background-color: #0c4a6e;
+            color: #7dd3fc;
+            padding: 0.35rem 1rem;
+            border-radius: 9999px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            border: 1px solid #0284c7;
+        }
+
+        .card {
+            width: 100%;
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 1.25rem;
+            padding: 2rem;
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .question-text {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #f1f5f9;
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+
+        .options-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.85rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .option-btn {
+            width: 100%;
+            text-align: left;
+            background-color: #1e293b;
+            color: var(--text-main);
+            padding: 1rem 1.25rem;
+            border-radius: 0.85rem;
+            border: 1px solid #334155;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .option-btn:hover:not(:disabled) {
+            background-color: #283548;
+            border-color: var(--accent);
+            transform: translateY(-1px);
+        }
+
+        .option-btn:disabled {
+            cursor: not-allowed;
+        }
+
+        .option-btn.correct {
+            background-color: #064e3b !important;
+            border-color: #059669 !important;
+            color: #ecfdf5 !important;
+        }
+
+        .option-btn.incorrect {
+            background-color: #7f1d1d !important;
+            border-color: #dc2626 !important;
+            color: #fee2e2 !important;
+        }
+
+        .feedback-box {
+            padding: 1.15rem;
+            border-radius: 0.85rem;
+            margin-bottom: 1.5rem;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        .feedback-box.correct-feedback {
+            background-color: #022c22;
+            border: 1px solid #047857;
+            color: #a7f3d0;
+        }
+
+        .feedback-box.incorrect-feedback {
+            background-color: #450a0a;
+            border: 1px solid #b91c1c;
+            color: #fecdd3;
+        }
+
+        .btn-primary {
+            background-color: var(--accent);
+            color: #0f172a;
+            font-weight: 700;
+            padding: 0.85rem 1.75rem;
+            border-radius: 0.85rem;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.2s ease, transform 0.1s ease;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--accent-hover);
+            transform: translateY(-1px);
+        }
+
+        .results-card {
+            text-align: center;
+            padding: 3rem 2rem;
+        }
+
+        .results-card h2 {
+            font-size: 2.25rem;
+            color: var(--accent);
+            margin-bottom: 1rem;
+        }
+
+        .results-card p {
+            font-size: 1.25rem;
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        footer {
+            background-color: var(--bg-card);
+            border-top: 1px solid var(--border-color);
+            padding: 1rem;
+            text-align: center;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>IGCSE ICT Practice Quiz</h1>
+        <p>Topics 6.7 & 6.7.1 Computers & Information Systems in Medicine (20 MCQs)</p>
+    </header>
+
+    <main>
+        <div class="quiz-status">
+            <span id="question-counter">Question 1 of 20</span>
+            <span id="score-display" class="score-pill">Score: 0</span>
+        </div>
+
+        <!-- Quiz Container -->
+        <div id="quiz-container" class="card">
+            <div id="question-box" class="question-text">
+                Loading question...
+            </div>
+
+            <div id="options-container" class="options-list">
+                <!-- Options populated dynamically -->
+            </div>
+
+            <div id="feedback-box" class="feedback-box hidden">
+                <!-- Feedback populated dynamically -->
+            </div>
+
+            <div style="display: flex; justify-content: flex-end;">
+                <button id="next-btn" onclick="nextQuestion()" class="btn-primary hidden">Next Question</button>
+            </div>
+        </div>
+
+        <!-- Results Container -->
+        <div id="results-container" class="card results-card hidden">
+            <h2>Quiz Completed! 🎉</h2>
+            <p id="final-score">You scored X out of 20</p>
+            <button onclick="restartQuiz()" class="btn-primary">Restart Quiz</button>
+        </div>
+    </main>
+
+    <footer>
+        IGCSE ICT Revision &bull; Information Systems in Medicine
+    </footer>
+
+    <script>
+        const questions = [
+            {
+                question: "What is an Electronic Health Record (EHR) or Patient Information System in medicine?",
+                options: [
+                    { text: "A computerized database system used by hospitals and clinics to store, manage, and update patient medical histories, diagnoses, and prescriptions digitally", isCorrect: true, rationale: "EHR systems centralize patient medical records digitally, allowing instant secure access across medical staff." },
+                    { text: "A physical cardboard filing cabinet used for storing paper prescription notes", isCorrect: false, rationale: "EHRs are digital databases, not physical paper cabinets." },
+                    { text: "A computer virus protection software suite for hospital computers", isCorrect: false, rationale: "This describes anti-malware software." },
+                    { text: "A magnetic tape archiving vault for backup reels", isCorrect: false, rationale: "This is backing storage media." }
+                ]
+            },
+            {
+                question: "What are the key advantages of using computerized patient information systems in hospitals compared to paper records?",
+                options: [
+                    { text: "Faster data retrieval, improved accuracy, easy secure sharing between departments, and elimination of lost paper folders", isCorrect: true, rationale: "Digital medical records eliminate paper clutter, enable instant searching, and allow secure multi-user access." },
+                    { text: "Increased risk of losing patient records permanently", isCorrect: false, rationale: "Digital systems protect against loss through automated database backups." },
+                    { text: "Requirement to write all patient notes by hand using ink pens", isCorrect: false, rationale: "Digital systems use electronic typing and touchscreens." },
+                    { text: "Zero reliance on computer hardware or electrical power", isCorrect: false, rationale: "Databases require computer systems and power." }
+                ]
+            },
+            {
+                question: "Why is patient data security and confidentiality critical in medical information systems?",
+                options: [
+                    { text: "Medical records contain highly sensitive personal and health information that must be legally protected against unauthorized access, data breaches, or identity theft", isCorrect: true, rationale: "Patient confidentiality laws require strict role-based access controls to safeguard sensitive medical histories." },
+                    { text: "To prevent hospital computer monitors from overheating", isCorrect: false, rationale: "Data security protects privacy confidentiality, not hardware temperature." },
+                    { text: "To increase internet browser download speeds", isCorrect: false, rationale: "Security permissions do not affect network bandwidth." },
+                    { text: "To format hard disk drives into clean partitions", isCorrect: false, rationale: "This is disk management." }
+                ]
+            },
+            {
+                question: "What role do unique patient ID numbers play in a hospital medical database system?",
+                options: [
+                    { text: "They act as primary keys in database tables, ensuring every patient has a unique identifier to prevent data confusion, medical errors, and duplicate records", isCorrect: true, rationale: "Primary keys uniquely identify each patient record across appointments, prescriptions, and lab test tables." },
+                    { text: "They determine the patient's body height and shoe size", isCorrect: false, rationale: "ID numbers are database keys, not physical body measurements." },
+                    { text: "They specify the patient's home postal mailing address", isCorrect: false, rationale: "Addresses are stored in separate demographic fields." },
+                    { text: "They act as Wi-Fi router network passwords", isCorrect: false, rationale: "Wi-Fi passwords secure wireless access, not database keys." }
+                ]
+            },
+            {
+                question: "How do computerized expert systems assist doctors in medical diagnosis?",
+                options: [
+                    { text: "By analyzing patient symptoms against a computerized database of medical knowledge and rules to suggest potential diagnoses and treatment options", isCorrect: true, rationale: "Medical expert systems use AI rule-bases to assist physicians in diagnosing complex illnesses." },
+                    { text: "By performing major surgery on patients autonomously without human surgeons", isCorrect: false, rationale: "Expert systems assist with diagnosis, whereas surgical robots assist with operations." },
+                    { text: "By printing paper prescription receipts on dot-matrix printers", isCorrect: false, rationale: "This describes administrative printing." },
+                    { text: "By scanning supermarket barcodes at hospital pharmacies", isCorrect: false, rationale: "This is pharmacy inventory barcode scanning." }
+                ]
+            },
+            {
+                question: "What is Computer-Assisted Surgery (or Robotic Surgery), and how is it used in operating theaters?",
+                options: [
+                    { text: "Using computer-controlled robotic arms guided by surgeons to perform minimally invasive operations with extreme sub-millimeter precision", isCorrect: true, rationale: "Surgical robots translate the surgeon's hand movements into microscopic, highly stable instrument precision." },
+                    { text: "Robots performing complex operations entirely on their own while human doctors sleep", isCorrect: false, rationale: "Surgeons always control robotic arms directly during operations." },
+                    { text: "Using flatbed document scanners to scan patient X-ray films", isCorrect: false, rationale: "This is document and medical imaging scanning." },
+                    { text: "Playing arcade video games to relax hospital staff", isCorrect: false, rationale: "This is entertainment." }
+                ]
+            },
+            {
+                question: "What imaging technology uses computer processing to create detailed 3D cross-sectional scans of the human body?",
+                options: [
+                    { text: "Computed Tomography (CT scans) and Magnetic Resonance Imaging (MRI)", isCorrect: true, rationale: "CT and MRI scanners rely on powerful computers to reconstruct complex 3D internal body images from sensor data." },
+                    { text: "Standard office inkjet printers", isCorrect: false, rationale: "Inkjet printers output paper documents." },
+                    { text: "Barcode scanners used at supermarket tills", isCorrect: false, rationale: "This is retail POS." },
+                    { text: "Magnetic tape archiving drives", isCorrect: false, rationale: "This is storage media." }
+                ]
+            },
+            {
+                question: "How do patient monitoring systems in hospital intensive care units (ICUs) function?",
+                options: [
+                    { text: "Sensors continuously measure vital signs (heart rate, blood pressure, oxygen saturation) and microprocessors trigger alarm outputs if readings fall outside safe limits", isCorrect: true, rationale: "ICU monitoring systems use sensors in feedback loops to watch patient vitals and alert medical staff instantly to emergencies." },
+                    { text: "They print out paper novels for patients to read", isCorrect: false, rationale: "Monitors track vital medical signs, not book publishing." },
+                    { text: "They scan patient grocery receipts", isCorrect: false, rationale: "This is unrelated." },
+                    { text: "They operate building lighting thermostats", isCorrect: false, rationale: "This is smart home climate control." }
+                ]
+            },
+            {
+                question: "What is telemedicine (or telehealth)?",
+                options: [
+                    { text: "The delivery of healthcare services and medical consultations remotely using telecommunications and video conferencing technology", isCorrect: true, rationale: "Telemedicine allows doctors to consult with patients remotely over video calls, improving healthcare access." },
+                    { text: "Watching television entertainment movies inside hospital waiting rooms", isCorrect: false, rationale: "Telemedicine is clinical healthcare delivery, not entertainment TV." },
+                    { text: "Operating factory industrial robotic welding arms", isCorrect: false, rationale: "This is industrial automation." },
+                    { text: "Storing database files on local hard disk drives", isCorrect: false, rationale: "This is local storage." }
+                ]
+            },
+            {
+                question: "What are the advantages of telemedicine for patients in remote or rural areas?",
+                options: [
+                    { text: "Access to specialist doctors without needing to travel long distances, saving time and transport costs", isCorrect: true, rationale: "Telemedicine bridges geographical gaps, giving remote patients direct access to medical experts." },
+                    { text: "Requirement to travel 500 miles to the nearest city hospital for every minor question", isCorrect: false, rationale: "Telemedicine eliminates the need for physical travel." },
+                    { text: "Complete elimination of all medical diagnoses", isCorrect: false, rationale: "Telemedicine enables remote clinical diagnosis and advice." },
+                    { text: "Mandatory requirement for paper postal mail consultations", isCorrect: true.split()[0] === 'false' && true, rationale: "Consultations occur via live digital video, not postal mail." }
+                ]
+            },
+            {
+                question: "What is 3D bioprinting and prosthetic manufacturing in modern medical technology?",
+                options: [
+                    { text: "Using 3D printers and CAD software to manufacture customized prosthetic limbs, dental implants, and biological tissue scaffolds", isCorrect: true, rationale: "3D printing revolutionizes medicine by creating patient-specific prosthetics and implants tailored to exact body scans." },
+                    { text: "Printing black-and-white text documents on office laser printers", isCorrect: false, rationale: "Laser printers output standard office paperwork, not medical prosthetics." },
+                    { text: "Scanning barcodes on pharmaceutical medicine bottles", isCorrect: false, rationale: "This is inventory scanning." },
+                    { text: "Storing database backup tapes", isCorrect: false, rationale: "This is storage archiving." }
+                ]
+            },
+            {
+                question: "How do hospital pharmacy computer systems manage prescription dispensing safely?",
+                options: [
+                    { text: "By checking doctor e-prescriptions against patient records for drug allergies, dosage errors, and interacting medications using barcode scanning verification", isCorrect: true, rationale: "Pharmacy IT systems prevent medication dispensing errors by cross-checking patient allergies and prescription data." },
+                    { text: "By dispensing random medicines without checking doctor instructions", isCorrect: false, rationale: "Pharmacy dispensing is strictly verified against clinical prescriptions." },
+                    { text: "By printing paper phone books", isCorrect: false, rationale: "This is unrelated." },
+                    { text: "By formatting hard disk drives", isCorrect: false, rationale: "This is disk formatting." }
+                ]
+            },
+            {
+                question: "What is wearable medical technology (such as smartwatches or continuous glucose monitors)?",
+                options: [
+                    { text: "Compact electronic devices worn on the body that monitor health metrics (heart rate, ECG, blood glucose) and alert users or doctors to anomalies", isCorrect: true, rationale: "Wearables empower patients to track chronic health conditions and vital signs continuously in daily life." },
+                    { text: "Heavy desktop mainframe computers worn on wrists", isCorrect: false, rationale: "Wearables are lightweight, portable micro-devices." },
+                    { text: "Non-electronic cotton hospital gowns", isCorrect: false, rationale: "Gowns are clothing, not medical IT technology." },
+                    { text: "Optical CD-ROM discs used for data storage", isCorrect: false, rationale: "This is optical storage media." }
+                ]
+            },
+            {
+                question: "What are the potential risks or challenges of relying heavily on computerized information systems in medicine?",
+                options: [
+                    { text: "System downtime from software crashes or power outages, cybersecurity ransomware attacks locking patient records, and software bugs leading to medical errors", isCorrect: true, rationale: "IT dependency in hospitals creates risks if systems fail or suffer cyberattacks, potentially impacting patient care." },
+                    { text: "Computers make hospital operations 100% infallible with zero possibility of errors", isCorrect: false, rationale: "Software bugs and hardware failures can still occur." },
+                    { text: "Computerized medical systems consume zero electricity", isCorrect: false, rationale: "Medical hardware requires reliable electrical power." },
+                    { text: "Computers eliminate the need for doctors and nurses entirely", isCorrect: false, rationale: "Medical staff remain essential for patient care and clinical judgment." }
+                ]
+            },
+            {
+                question: "How do hospital appointment booking and scheduling systems benefit patients and clinics?",
+                options: [
+                    { text: "They manage doctor schedules, prevent double-booking of appointments, send automated SMS reminders to patients, and reduce waiting list times", isCorrect: true, rationale: "Automated booking software streamlines clinic workflows and reduces missed appointments through reminders." },
+                    { text: "They make patient appointment booking impossible", isCorrect: false, rationale: "Booking systems are designed to make scheduling easy and accessible." },
+                    { text: "They require patients to queue outside clinics overnight in paper lines", isCorrect: false, rationale: "Online and phone booking systems eliminate overnight physical queues." },
+                    { text: "They delete patient medical history records automatically", isCorrect: false, rationale: "Medical records are preserved securely in databases." }
+                ]
+            },
+            {
+                question: "What is the function of PACS (Picture Archiving and Communication System) in modern hospitals?",
+                options: [
+                    { text: "A medical imaging technology dedicated to securely storing, retrieving, and sharing digital medical images (X-rays, MRIs, CT scans) across hospital networks", isCorrect: true, rationale: "PACS provides digital storage and rapid retrieval of medical imaging studies for radiologists and physicians." },
+                    { text: "A physical mailing service for sending paper letters", isCorrect: false, rationale: "PACS is digital medical imaging software, not postal mail." },
+                    { text: "An office spreadsheet app for calculating staff salaries", isCorrect: false, rationale: "This describes payroll software." },
+                    { text: "A network router for Wi-Fi access", isCorrect: false, rationale: "This describes network routing hardware." }
+                ]
+            },
+            {
+                question: "Why do modern medical devices require rigorous software testing and FDA/regulatory approval before use in hospitals?",
+                options: [
+                    { text: "Because software failures in life-support or diagnostic medical devices can result in patient injury or fatal medical disasters", isCorrect: true, rationale: "Medical devices are safety-critical systems requiring extensive testing to ensure absolute reliability." },
+                    { text: "To make medical devices cost one billion dollars each", isCorrect: false, rationale: "Testing ensures patient safety, not inflated pricing." },
+                    { text: "To ensure devices can run video games smoothly", isCorrect: false, rationale: "Medical devices are designed for clinical care, not gaming." },
+                    { text: "To eliminate the need for electricity", isCorrect: false, rationale: "Medical devices require electrical power." }
+                ]
+            },
+            {
+                question: "How do hospital blood bank and laboratory information systems (LIS) track patient specimens?",
+                options: [
+                    { text: "Using barcode or RFID labeling on blood vials and test tubes, ensuring accurate sample matching against patient database records", isCorrect: true, rationale: "Barcode tracking in labs prevents dangerous specimen mix-ups and ensures accurate diagnostic test results." },
+                    { text: "By tasting blood samples manually to check chemistry", isCorrect: true.split()[0] === 'false' && true, rationale: "Manual tasting is unsanitary and obsolete; labs use automated analyzers and barcode tracking." },
+                    { text: "By storing test tubes inside office filing cabinets without labels", isCorrect: false, rationale: "Unlabeled tubes would cause dangerous medical errors." },
+                    { text: "By mailing blood vials through standard postal envelopes", isCorrect: false, rationale: "Samples are processed within secure hospital laboratory IT networks." }
+                ]
+            },
+            {
+                question: "What is the impact of artificial intelligence (AI) and machine learning in modern medical information systems?",
+                options: [
+                    { text: "Assisting radiologists in detecting early signs of diseases (like tumors on X-rays) with high speed and accuracy, and predicting patient deterioration risks", isCorrect: true, rationale: "AI algorithms analyze complex medical scans and patient data rapidly to support early clinical detection." },
+                    { text: "Replacing human physicians with unfeeling mechanical robots permanently", isCorrect: false, rationale: "AI assists clinicians as a diagnostic tool rather than replacing human medical judgment." },
+                    { text: "Printing out paper medical textbooks on office printers", isCorrect: false, rationale: "This is publishing, not AI medical analysis." },
+                    { text: "Formatting computer hard disk drives", isCorrect: false, rationale: "This is disk maintenance." }
+                ]
+            },
+            {
+                question: "Which summary best encapsulates 6.7 / 6.7.1 Computers and Information Systems in Medicine in IGCSE ICT?",
+                options: [
+                    { text: "Computers and information systems in medicine revolutionize healthcare through electronic health records (EHR), expert diagnostic systems, computer-assisted surgery, medical imaging (CT/MRI), patient monitoring, and telemedicine, requiring robust data security and safety standards", isCorrect: true, rationale: "Medical IT systems integrate EHR databases, expert systems, imaging, and monitoring to enhance patient care and operational efficiency." },
+                    { text: "Computers in medicine are manual paper logbooks used exclusively by hospital receptionists", isCorrect: false, rationale: "Medical IT systems are advanced digital databases and clinical technologies." },
+                    { text: "Computers in medicine require no data security or patient confidentiality protection", isCorrect: false, rationale: "Patient confidentiality and data security are strictly mandatory." },
+                    { text: "Computers in medicine are identical to offline video game consoles", isCorrect: false, rationale: "Medical systems support healthcare delivery, not gaming." }
+                ]
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let answered = false;
+
+        const questionCounter = document.getElementById("question-counter");
+        const scoreDisplay = document.getElementById("score-display");
+        const questionBox = document.getElementById("question-box");
+        const optionsContainer = document.getElementById("options-container");
+        const feedbackBox = document.getElementById("feedback-box");
+        const nextBtn = document.getElementById("next-btn");
+        const quizContainer = document.getElementById("quiz-container");
+        const resultsContainer = document.getElementById("results-container");
+        const finalScore = document.getElementById("final-score");
+
+        function loadQuestion() {
+            answered = false;
+            feedbackBox.classList.add("hidden");
+            nextBtn.classList.add("hidden");
+            
+            const q = questions[currentQuestionIndex];
+            questionCounter.textContent = `Question ${currentQuestionIndex + 1} of ${questions.length}`;
+            scoreDisplay.textContent = `Score: ${score}`;
+            questionBox.textContent = q.question;
+
+            // Shuffle options array randomly so correct answer is not always first
+            let shuffledOptions = [...q.options].sort(() => Math.random() - 0.5);
+
+            optionsContainer.innerHTML = "";
+            shuffledOptions.forEach((opt) => {
+                const btn = document.createElement("button");
+                btn.className = "option-btn";
+                btn.textContent = opt.text;
+                btn.onclick = () => selectOption(opt, shuffledOptions);
+                optionsContainer.appendChild(btn);
+            });
+        }
+
+        function selectOption(selectedOpt, shuffledOptions) {
+            if (answered) return;
+            answered = true;
+
+            const allOptionButtons = optionsContainer.children;
+
+            shuffledOptions.forEach((opt, idx) => {
+                allOptionButtons[idx].disabled = true;
+                if (opt.isCorrect) {
+                    allOptionButtons[idx].classList.add("correct");
+                } else if (opt === selectedOpt && !selectedOpt.isCorrect) {
+                    allOptionButtons[idx].classList.add("incorrect");
+                }
+            });
+
+            feedbackBox.classList.remove("hidden");
+            if (selectedOpt.isCorrect) {
+                score++;
+                scoreDisplay.textContent = `Score: ${score}`;
+                feedbackBox.className = "feedback-box correct-feedback";
+                feedbackBox.innerHTML = `<strong>Correct!</strong> ${selectedOpt.rationale}`;
+            } else {
+                feedbackBox.className = "feedback-box incorrect-feedback";
+                feedbackBox.innerHTML = `<strong>Incorrect.</strong> ${selectedOpt.rationale}`;
+            }
+
+            if (currentQuestionIndex < questions.length - 1) {
+                nextBtn.textContent = "Next Question";
+            } else {
+                nextBtn.textContent = "View Results";
+            }
+            nextBtn.classList.remove("hidden");
+        }
+
+        function nextQuestion() {
+            currentQuestionIndex++;
+            if (currentQuestionIndex < questions.length) {
+                loadQuestion();
+            } else {
+                quizContainer.classList.add("hidden");
+                resultsContainer.classList.remove("hidden");
+                finalScore.textContent = `You scored ${score} out of ${questions.length}`;
+            }
+        }
+
+        function restartQuiz() {
+            currentQuestionIndex = 0;
+            score = 0;
+            resultsContainer.classList.add("hidden");
+            quizContainer.classList.remove("hidden");
+            loadQuestion();
+        }
+
+        // Initialize quiz on load
+        loadQuestion();
+    </script>
+</body>
+</html>
