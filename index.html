@@ -345,7 +345,7 @@
                     { text: "Access to specialist doctors without needing to travel long distances, saving time and transport costs", isCorrect: true, rationale: "Telemedicine bridges geographical gaps, giving remote patients direct access to medical experts." },
                     { text: "Requirement to travel 500 miles to the nearest city hospital for every minor question", isCorrect: false, rationale: "Telemedicine eliminates the need for physical travel." },
                     { text: "Complete elimination of all medical diagnoses", isCorrect: false, rationale: "Telemedicine enables remote clinical diagnosis and advice." },
-                    { text: "Mandatory requirement for paper postal mail consultations", isCorrect: true.split()[0] === 'false' && true, rationale: "Consultations occur via live digital video, not postal mail." }
+                    { text: "Live video consultations replacing postal mail", isCorrect: false, rationale: "Consultations occur via live digital video, not postal mail." }
                 ]
             },
             {
@@ -415,7 +415,7 @@
                 question: "How do hospital blood bank and laboratory information systems (LIS) track patient specimens?",
                 options: [
                     { text: "Using barcode or RFID labeling on blood vials and test tubes, ensuring accurate sample matching against patient database records", isCorrect: true, rationale: "Barcode tracking in labs prevents dangerous specimen mix-ups and ensures accurate diagnostic test results." },
-                    { text: "By tasting blood samples manually to check chemistry", isCorrect: true.split()[0] === 'false' && true, rationale: "Manual tasting is unsanitary and obsolete; labs use automated analyzers and barcode tracking." },
+                    { text: "By tasting blood samples manually to check chemistry", isCorrect: false, rationale: "Manual tasting is unsanitary and obsolete; labs use automated analyzers and barcode tracking." },
                     { text: "By storing test tubes inside office filing cabinets without labels", isCorrect: false, rationale: "Unlabeled tubes would cause dangerous medical errors." },
                     { text: "By mailing blood vials through standard postal envelopes", isCorrect: false, rationale: "Samples are processed within secure hospital laboratory IT networks." }
                 ]
@@ -454,6 +454,19 @@
         const resultsContainer = document.getElementById("results-container");
         const finalScore = document.getElementById("final-score");
 
+        function shuffleArray(array) {
+            let currentIndex = array.length, randomIndex;
+            while (currentIndex !== 0) {
+                randomIndex = Math.floor(Math.random() * currentIndex);
+                currentIndex--;
+                [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
+            }
+            return array;
+        }
+
+        // Shuffle questions order on load
+        shuffleArray(questions);
+
         function loadQuestion() {
             answered = false;
             feedbackBox.classList.add("hidden");
@@ -465,7 +478,8 @@
             questionBox.textContent = q.question;
 
             // Shuffle options array randomly so correct answer is not always first
-            let shuffledOptions = [...q.options].sort(() => Math.random() - 0.5);
+            let shuffledOptions = [...q.options];
+            shuffleArray(shuffledOptions);
 
             optionsContainer.innerHTML = "";
             shuffledOptions.forEach((opt) => {
@@ -497,10 +511,11 @@
                 score++;
                 scoreDisplay.textContent = `Score: ${score}`;
                 feedbackBox.className = "feedback-box correct-feedback";
-                feedbackBox.innerHTML = `<strong>Correct!</strong> ${selectedOpt.rationale}`;
+                feedbackBox.innerHTML = `<strong>Correct! 🎉</strong> ${selectedOpt.rationale}`;
             } else {
                 feedbackBox.className = "feedback-box incorrect-feedback";
-                feedbackBox.innerHTML = `<strong>Incorrect.</strong> ${selectedOpt.rationale}`;
+                const correctOpt = questions[currentQuestionIndex].options.find(o => o.isCorrect);
+                feedbackBox.innerHTML = `<strong>Incorrect.</strong> ${selectedOpt.rationale}<br><br><em>Correct answer:</em> ${correctOpt.text}`;
             }
 
             if (currentQuestionIndex < questions.length - 1) {
@@ -525,6 +540,7 @@
         function restartQuiz() {
             currentQuestionIndex = 0;
             score = 0;
+            shuffleArray(questions);
             resultsContainer.classList.add("hidden");
             quizContainer.classList.remove("hidden");
             loadQuestion();
